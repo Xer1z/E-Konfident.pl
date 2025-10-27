@@ -1,0 +1,347 @@
+
+<!doctype html>
+<html lang="pl" class="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>E-Konfident.pl — Ulepszony Formularz Donosu</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+  <style>
+    :root { --bg:#0a0a0a; --panel:#111; --muted:#9ca3af; }
+    html,body{height:100%;}
+    body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,'Helvetica Neue',Arial; background:linear-gradient(180deg,#050505 0%, #0e0e0f 100%); color:#e6eef8; margin:0;}
+#particles-js {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0; left: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+    .site{position:relative; z-index:2; min-height:100%; display:flex; align-items:center; justify-content:center; padding:48px 20px}
+    .card{width:100%; max-width:100%; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.04); border-radius:14px; padding:28px; box-shadow:0 10px 40px rgba(2,6,23,0.7)}
+    .brand{display:flex; gap:12px; align-items:center}
+    .logo{width:56px;height:56px;border-radius:10px; background:radial-gradient(circle at 30% 30%, #39ff14, #0fa); display:flex; align-items:center; justify-content:center; color:#041; font-weight:800; font-size:20px; box-shadow:0 6px 18px rgba(57,255,20,0.06)}
+    .title{font-size:22px; font-weight:700; color:#bff29a; text-shadow:0 2px 18px rgba(67,255,129,0.03)}
+    .subtitle{color:var(--muted); font-size:13px}
+    label{display:block; font-weight:600; color:#dbeafe; margin-bottom:6px}
+    .muted{color:#9aa7b2; font-size:13px}
+    .field{background:#0f1316; border:1px solid rgba(255,255,255,0.03); padding:12px; border-radius:10px}
+    input,select,textarea{background:transparent; border:none; color:inherit; width:100%; font-size:15px}
+    textarea{min-height:140px}
+    .green-outline:focus{outline:none; box-shadow:0 0 0 4px rgba(57,255,20,0.06); border-color:rgba(57,255,20,0.12)}
+    .grid-2{display:grid; grid-template-columns:1fr 360px; gap:20px}
+    @media (max-width:980px){ .grid-2{grid-template-columns:1fr; } .aside {order:2} }
+    .priority-badge{display:inline-flex; gap:8px; align-items:center; padding:6px 10px; border-radius:999px; font-weight:700}
+    .pri-1{background:linear-gradient(90deg,#7f1d1d, #ef4444); color:white}
+    .pri-2{background:linear-gradient(90deg,#b45309,#f97316); color:white}
+    .pri-3{background:linear-gradient(90deg,#b79b00,#f59e0b); color:#081018}
+    .pri-4{background:linear-gradient(90deg,#0f766e,#14b8a6); color:white}
+    .pri-5{background:linear-gradient(90deg,#1e293b,#334155); color:#cbd5e1}
+    .preview{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.0)); border:1px solid rgba(255,255,255,0.03); border-radius:12px; padding:16px}
+    .tag{display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; background:rgba(255,255,255,0.04); font-weight:600; margin:6px 6px 6px 0}
+    .chips{display:flex; flex-wrap:wrap}
+    .dropzone{border:1px dashed rgba(255,255,255,0.04); padding:12px; border-radius:8px; text-align:center}
+    .btn{display:inline-flex; gap:10px; align-items:center; padding:10px 16px; border-radius:10px; font-weight:700; cursor:pointer}
+    .btn-primary{background:#ff073a; color:white; box-shadow:0 8px 30px rgba(255,7,58,0.08)}
+    .btn-ghost{background:transparent; color:#cbd5e1; border:1px solid rgba(255,255,255,0.03)}
+    .small{font-size:13px}
+    .help{font-size:13px; color:#9aa7b2}
+    .kbd{background:#0b1220; padding:6px 8px; border-radius:6px; font-weight:700; font-size:12px}
+  </style>
+</head>
+<body>
+<div id="particles-js"></div>
+<div class="site">
+  <div class="card">
+    <div class="brand" style="justify-content:space-between">
+      <div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="logo">EK</div>
+          <div>
+            <div class="title">E‑Konfident.pl — Formularz zgłoszenia</div>
+            <div class="subtitle">Bezpośredni formularz — podgląd, priorytety, tagi i załączniki</div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:right">
+        <div class="muted">Tryb: <span class="kbd">Dark</span></div>
+      </div>
+    </div>
+
+    <hr style="margin:18px 0; border-color:rgba(255,255,255,0.03)" />
+
+    <div class="grid-2">
+      <div class="main">
+        <form id="reportForm" novalidate>
+
+          <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px">
+            <div style="flex:1">
+              <label for="anonim">Forma zgłoszenia</label>
+              <div class="field green-outline" style="display:flex;gap:8px;align-items:center">
+                <select id="anonim" aria-label="anonimowość" class="bg-transparent">
+                  <option value="anonim">Anonimowo</option>
+                  <option value="jawnie">Nieanonimowo</option>
+                </select>
+              </div>
+            </div>
+            <div style="width:180px">
+              <label for="priority">Priorytet</label>
+              <div class="field">
+                <select id="priority" aria-label="priorytet"></select>
+              </div>
+            </div>
+          </div>
+
+          <div id="userNameWrapper" style="display:none;margin-bottom:12px">
+            <label for="userName">Twoje imię (widoczne gdy nieanonimowo)</label>
+            <div class="field green-outline"><input id="userName" type="text" placeholder="Imię i/lub pseudonim" /></div>
+          </div>
+
+          <div style="margin-bottom:12px">
+            <label for="categorySearch">Kategoria zgłoszenia</label>
+            <div class="field">
+              <!-- search-enabled category selector -->
+              <input id="categorySearch" type="text" placeholder="Wyszukaj kategorię (np. Korupcja)" aria-label="wyszukaj kategorię" />
+              <select id="category" size="6" style="margin-top:8px; width:100%; background:transparent; border:none;" aria-label="lista kategorii"></select>
+            </div>
+            <div class="help" style="margin-top:6px">Wybierz najtrafniejszą kategorię. Jeśli żadna nie pasuje — wybierz "Inne" i opisz.</div>
+          </div>
+
+          <div style="margin-bottom:12px">
+            <label for="tagsInput">Tagi</label>
+            <div class="field" style="padding:10px">
+              <div style="display:flex;gap:8px;align-items:center">
+                <input id="tagsInput" type="text" placeholder="#oszustwo #korupcja — enter by dodać" aria-label="tagi" />
+                <button type="button" id="addTagBtn" class="btn btn-ghost small">Dodaj</button>
+              </div>
+              <div id="chips" class="chips" style="margin-top:10px"></div>
+              <div class="help" style="margin-top:6px">Tagi pomagają filtrować i priorytetyzować zgłoszenia.</div>
+            </div>
+          </div>
+
+          <div style="margin-bottom:12px">
+            <label for="reportContent">Treść zgłoszenia</label>
+            <div class="field"><textarea id="reportContent" placeholder="Opisz co i kiedy się wydarzyło, osoby zaangażowane, dowody..." aria-label="treść zgłoszenia"></textarea></div>
+          </div>
+
+          <div style="margin-bottom:12px">
+            <label>Załącznik (opcjonalnie)</label>
+            <div class="dropzone" id="dropzone">
+              <div class="muted">Upuść plik tutaj lub kliknij, aby wybrać (max 10MB, typy: pdf, png, jpg, docx, zip)</div>
+              <input id="attachment" type="file" style="display:none" />
+              <div id="filePreview" style="margin-top:10px"></div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:10px;align-items:center;margin-top:18px">
+            <div id="loader" style="display:none"><svg class="animate-spin h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg></div>
+            <button type="button" id="previewBtn" class="btn btn-ghost">Podgląd</button>
+            <button type="submit" id="submitBtn" class="btn btn-primary">Zgłoś</button>
+            <button type="button" id="copyBtn" class="btn btn-ghost">Kopiuj treść</button>
+          </div>
+
+        </form>
+      </div>
+
+      <aside class="aside">
+        <div class="preview">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="font-weight:800">Podsumowanie zgłoszenia</div>
+            <div id="priorityPreview" class="priority-badge pri-5">Priorytet: Brak</div>
+          </div>
+          <div style="margin-top:12px">
+            <div class="muted">Anonimowość: <span id="anonPreview">Anonim</span></div>
+            <div class="muted">Kategoria: <strong id="catPreview">—</strong></div>
+            <div class="muted">Tagi:</div>
+            <div id="tagsPreview" class="chips" style="margin-top:8px"></div>
+          </div>
+
+          <hr style="margin:12px 0; border-color:rgba(255,255,255,0.03)" />
+
+          <div style="font-weight:700">Treść (podgląd)</div>
+          <div id="contentPreview" style="margin-top:8px; color:#cfe9ff; white-space:pre-wrap; max-height:280px; overflow:auto">(pusta)</div>
+
+          <div style="margin-top:12px; display:flex;gap:8px;flex-wrap:wrap">
+            <div class="help">Wysłanie może być blokowane przez CORS — jeśli wysyłka nie działa, skorzystaj z backendu lub przycisku "Kopiuj treść".</div>
+          </div>
+        </div>
+
+        <div style="margin-top:14px; text-align:center">
+          <div class="muted small">Przyciski: Podgląd — sprawdź zgłoszenie; Zgłoś — wyślij (wyświetli potwierdzenie)</div>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// --- Dane: kategorie (40) i priorytety (6) ---
+const categories = [
+  'Korupcja', 'Oszustwo finansowe', 'Wyłudzenie', 'Przemoc fizyczna', 'Nękanie (harassment)', 'Mobbing', 'Dyskryminacja',
+  'Naruszenie danych osobowych', 'Nielegalne działanie IT', 'Prawo pracy - naruszenie', 'Nadużycie władzy', 'Konflikt interesów',
+  'Fałszerstwo dokumentów', 'Sabotaż', 'Handel wpływami', 'Pranie pieniędzy', 'Zagrożenie BHP', 'Umyślne zniszczenie mienia',
+  'Oszustwo podatkowe', 'Przestępstwo gospodarcze', 'Handel ludźmi', 'Korupcja publiczna', 'Przestępstwo skarbowe', 'Naruszenie umów',
+  'Fałszywe raportowanie', 'Nieetyczne praktyki', 'Zatajanie informacji', 'Seksualne molestowanie', 'Naruszenie praw konsumenta',
+  'Kradzież', 'Nadużycie uprawnień', 'Przemoc psychiczna', 'Zagrożenie środowiska', 'Spam / phishing', 'Sabotaż informatyczny',
+  'Zagrożenia zdrowotne', 'Naruszenie procedur', 'Oszustwa ubezpieczeniowe', 'Inne'
+];
+// liczba kategorii: 40
+
+const priorities = [
+  {id:1, code:'Krytyczny', desc:'Natychmiastowa interwencja — bezpośrednie ryzyko dla życia/bezpieczeństwa', class:'pri-1'},
+  {id:2, code:'Wysoki', desc:'Wysokie ryzyko / znaczące szkody finansowe', class:'pri-2'},
+  {id:3, code:'Średni', desc:'Istotne naruszenie, wymaga szybkiej analizy', class:'pri-3'},
+  {id:4, code:'Niski', desc:'Mniej istotne, możliwe do rozpatrzenia w normalnym trybie', class:'pri-4'},
+  {id:5, code:'Informacyjny', desc:'Informacja bez bezpośredniego wpływu', class:'pri-5'},
+  {id:6, code:'Nieokreślony', desc:'Wybierz jeśli nie wiesz — moderator oceni', class:'pri-5'}
+];
+
+// --- Inicjalizacja DOM ---
+const categorySelect = document.getElementById('category');
+const categorySearch = document.getElementById('categorySearch');
+const prioritySelect = document.getElementById('priority');
+const anonim = document.getElementById('anonim');
+const userNameWrapper = document.getElementById('userNameWrapper');
+const userName = document.getElementById('userName');
+const tagsInput = document.getElementById('tagsInput');
+const addTagBtn = document.getElementById('addTagBtn');
+const chips = document.getElementById('chips');
+const tagsPreview = document.getElementById('tagsPreview');
+const reportContent = document.getElementById('reportContent');
+const contentPreview = document.getElementById('contentPreview');
+const anonPreview = document.getElementById('anonPreview');
+const catPreview = document.getElementById('catPreview');
+const priorityPreview = document.getElementById('priorityPreview');
+const priorityBadge = document.getElementById('priorityPreview');
+const fileInput = document.getElementById('attachment');
+const dropzone = document.getElementById('dropzone');
+const filePreview = document.getElementById('filePreview');
+const loader = document.getElementById('loader');
+
+let selectedTags = [];
+let selectedFile = null;
+
+// wypełnij listy
+categories.forEach(c=>{ const opt = document.createElement('option'); opt.value=c; opt.textContent=c; categorySelect.appendChild(opt); });
+priorities.forEach(p=>{ const opt = document.createElement('option'); opt.value=p.id; opt.textContent = `${p.code} — ${p.desc}`; prioritySelect.appendChild(opt); });
+
+// ustawienia DOM
+anonim.addEventListener('change', ()=>{ userNameWrapper.style.display = anonim.value==='jawnie' ? 'block' : 'none'; updatePreview(); });
+prioritySelect.addEventListener('change', ()=>updatePriorityPreview());
+categorySelect.addEventListener('change', ()=>updatePreview());
+categorySearch.addEventListener('input', ()=>{
+  const q = categorySearch.value.trim().toLowerCase();
+  // filtruj widoczne opcje
+  for(let i=0;i<categorySelect.options.length;i++){
+    const o = categorySelect.options[i];
+    o.style.display = o.text.toLowerCase().includes(q) ? 'block' : 'none';
+  }
+  // automatycznie wybierz pierwszy widoczny
+  for(let i=0;i<categorySelect.options.length;i++){ if(categorySelect.options[i].style.display==='block'){ categorySelect.selectedIndex = i; break; } }
+  updatePreview();
+});
+
+// tagi
+function renderTags(){ chips.innerHTML=''; tagsPreview.innerHTML=''; selectedTags.forEach(t=>{
+  const el = document.createElement('div'); el.className='tag'; el.textContent = t;
+  const rem = document.createElement('button'); rem.textContent='✕'; rem.style.marginLeft='8px'; rem.className='small'; rem.onclick = ()=>{ selectedTags = selectedTags.filter(x=>x!==t); renderTags(); };
+  el.appendChild(rem); chips.appendChild(el);
+  const p = document.createElement('div'); p.className='tag'; p.textContent=t; tagsPreview.appendChild(p);
+}); }
+addTagBtn.addEventListener('click', ()=>{ const v=tagsInput.value.trim(); if(!v) return; const tag=v.startsWith('#')?v:v.replace(/\s+/g,'_'); if(!selectedTags.includes(tag)){ selectedTags.push(tag); } tagsInput.value=''; renderTags(); });
+
+tagsInput.addEventListener('keypress', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); addTagBtn.click(); } });
+
+// file drag'n'drop
+dropzone.addEventListener('click', ()=>fileInput.click());
+fileInput.addEventListener('change', ()=>handleFile(fileInput.files[0]));
+['dragenter','dragover'].forEach(ev=>{ dropzone.addEventListener(ev, (e)=>{ e.preventDefault(); dropzone.style.borderColor='rgba(57,255,20,0.35)'; }); });
+['dragleave','drop'].forEach(ev=>{ dropzone.addEventListener(ev, (e)=>{ e.preventDefault(); dropzone.style.borderColor='rgba(255,255,255,0.04)'; }); });
+dropzone.addEventListener('drop', (e)=>{ const f = e.dataTransfer.files[0]; handleFile(f); });
+
+function handleFile(f){ if(!f) return; const max = 10*1024*1024; if(f.size>max){ alert('Plik zbyt duży (max 10MB)'); return; } const allowed = ['application/pdf','image/png','image/jpeg','application/vnd.openxmlformats-officedocument.wordprocessingml.document','application/zip']; if(!allowed.includes(f.type) && !f.name.match(/\.(pdf|png|jpe?g|docx|zip)$/i)){ alert('Nieobsługiwany typ pliku'); return; } selectedFile = f; filePreview.innerHTML = `<div class="muted">Wybrany plik: <strong>${escapeHtml(f.name)}</strong> (${Math.round(f.size/1024)} KB)</div>`; }
+
+function escapeHtml(s){ return s.replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;" })[c]); }
+
+// preview
+function updatePriorityPreview(){ const p = priorities.find(x=>String(x.id)===prioritySelect.value) || {code:'Brak', class:'pri-5'}; priorityPreview.textContent = `Priorytet: ${p.code}`; priorityPreview.className = `priority-badge ${p.class}`; }
+function updatePreview(){ anonPreview.textContent = anonim.value==='anonim' ? 'Anonim' : (userName.value || 'Podane'); catPreview.textContent = categorySelect.value || '—'; contentPreview.textContent = reportContent.value.trim() || '(pusta)'; renderTags(); updatePriorityPreview(); }
+
+reportContent.addEventListener('input', updatePreview);
+userName.addEventListener('input', updatePreview);
+
+// podgląd
+const previewBtn = document.getElementById('previewBtn');
+previewBtn.addEventListener('click', ()=>{ updatePreview(); alert('Podgląd zaktualizowany po prawej'); });
+
+// copy to clipboard
+const copyBtn = document.getElementById('copyBtn');
+copyBtn.addEventListener('click', async ()=>{
+  const text = buildMessageText();
+  try{ await navigator.clipboard.writeText(text); alert('Treść skopiowana do schowka'); }catch(e){ alert('Nie udało się skopiować: '+e); }
+});
+
+function buildMessageText(){ const isAnon = anonim.value==='anonim'; const name = isAnon? 'Anonim' : (userName.value || 'Podane'); const pri = (priorities.find(x=>String(x.id)===prioritySelect.value)||{code:'Brak'}).code; return `Nowe zgłoszenie\nAnonim: ${isAnon? 'Tak':'Nie'}\nImię: ${name}\nPriorytet: ${pri}\nKategoria: ${categorySelect.value}\nTagi: ${selectedTags.join(', ')}\n\nTreść:\n${reportContent.value.trim()}`; }
+
+// wysyłka
+const form = document.getElementById('reportForm');
+const submitBtn = document.getElementById('submitBtn');
+const webhookURL = 'https://discord.com/api/webhooks/1432415288359649280/vkv_KXleJL4PvO0zagVhy3QTn8nxhBHhFRhJ_i3FUjC-0fqEvNBSx-VYJ6wri5omi012'; // <-- Wstaw webhook
+
+form.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  // walidacja
+  if(!reportContent.value.trim()){ alert('Musisz wpisać treść zgłoszenia.'); return; }
+  if(!categorySelect.value){ alert('Wybierz kategorię.'); return; }
+
+  // potwierdzenie
+  if(!confirm('Czy na pewno chcesz wysłać zgłoszenie? Treść zostanie wysłana na ustawiony webhook.')) return;
+
+  loader.style.display='inline-block'; submitBtn.disabled=true;
+
+  const payloadText = buildMessageText();
+
+  try{
+    // jeśli mamy plik — użyj multipart/form-data (Discord webhook akceptuje plik w polu 'file')
+    if(selectedFile){
+      // Uwaga: przeglądarka może zablokować żądanie (CORS). Backend jest zalecany.
+      const formData = new FormData();
+      const payload_json = { content: payloadText };
+      formData.append('payload_json', JSON.stringify(payload_json));
+      formData.append('file', selectedFile, selectedFile.name);
+      const res = await fetch(webhookURL, { method:'POST', body: formData });
+      if(!res.ok) throw new Error('Server odpowiedział: '+res.status);
+    } else {
+      const res = await fetch(webhookURL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ content: payloadText }) });
+      if(!res.ok) throw new Error('Server odpowiedział: '+res.status);
+    }
+    alert('Zgłoszenie wysłane poprawnie.');
+    form.reset(); selectedTags=[]; selectedFile=null; filePreview.innerHTML=''; renderTags(); updatePreview();
+  }catch(err){
+    console.error(err);
+    alert('Wysłanie nie powiodło się: '+err.message+"\nJeśli błąd to prawdopodobnie CORS — użyj backendu lub skopiuj treść.");
+  } finally { loader.style.display='none'; submitBtn.disabled=false; }
+});
+
+// przy inicjalizacji
+updatePreview();
+
+</script>
+		<script>
+			particlesJS('particles-js',{
+				particles:{
+					number:{value:100,density:{enable:true,value_area:450}},
+					color:{value:"#ffffff"},
+					shape:{type:"circle"},
+					opacity:{value:0.25},
+					size:{value:1.5,random:true},
+					line_linked:{enable:true,distance:150,color:"#ffffff",opacity:0.05,width:1.5},
+					move:{enable:true,speed:1.5,random:true,straight:false,out_mode:"out"}
+				}
+			});
+		</script>
+</body>
+</html>
