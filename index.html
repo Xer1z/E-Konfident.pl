@@ -176,25 +176,26 @@
   </div>
 </div>
 
+
 <script>
 // --- Dane: kategorie i priorytety ---
 const categories = [
-  'Korupcja', 'Oszustwo finansowe', 'Wyłudzenie', 'Przemoc fizyczna', 'Nękanie (harassment)', 'Mobbing', 'Dyskryminacja',
-  'Naruszenie danych osobowych', 'Nielegalne działanie IT', 'Prawo pracy - naruszenie', 'Nadużycie władzy', 'Konflikt interesów',
-  'Fałszerstwo dokumentów', 'Sabotaż', 'Handel wpływami', 'Pranie pieniędzy', 'Zagrożenie BHP', 'Umyślne zniszczenie mienia',
-  'Oszustwo podatkowe', 'Przestępstwo gospodarcze', 'Handel ludźmi', 'Korupcja publiczna', 'Przestępstwo skarbowe', 'Naruszenie umów',
-  'Fałszywe raportowanie', 'Nieetyczne praktyki', 'Zatajanie informacji', 'Seksualne molestowanie', 'Naruszenie praw konsumenta',
-  'Kradzież', 'Nadużycie uprawnień', 'Przemoc psychiczna', 'Zagrożenie środowiska', 'Spam / phishing', 'Sabotaż informatyczny',
-  'Zagrożenia zdrowotne', 'Naruszenie procedur', 'Oszustwa ubezpieczeniowe', 'Inne'
+  'Korupcja','Oszustwo finansowe','Wyłudzenie','Przemoc fizyczna','Nękanie (harassment)','Mobbing','Dyskryminacja',
+  'Naruszenie danych osobowych','Nielegalne działanie IT','Prawo pracy - naruszenie','Nadużycie władzy','Konflikt interesów',
+  'Fałszerstwo dokumentów','Sabotaż','Handel wpływami','Pranie pieniędzy','Zagrożenie BHP','Umyślne zniszczenie mienia',
+  'Oszustwo podatkowe','Przestępstwo gospodarcze','Handel ludźmi','Korupcja publiczna','Przestępstwo skarbowe','Naruszenie umów',
+  'Fałszywe raportowanie','Nieetyczne praktyki','Zatajanie informacji','Seksualne molestowanie','Naruszenie praw konsumenta',
+  'Kradzież','Nadużycie uprawnień','Przemoc psychiczna','Zagrożenie środowiska','Spam / phishing','Sabotaż informatyczny',
+  'Zagrożenia zdrowotne','Naruszenie procedur','Oszustwa ubezpieczeniowe','Inne'
 ];
 
 const priorities = [
-  {id:1, code:'Krytyczny', desc:'Natychmiastowa interwencja — bezpośrednie ryzyko dla życia/bezpieczeństwa', class:'pri-1'},
-  {id:2, code:'Wysoki', desc:'Wysokie ryzyko / znaczące szkody finansowe', class:'pri-2'},
-  {id:3, code:'Średni', desc:'Istotne naruszenie, wymaga szybkiej analizy', class:'pri-3'},
-  {id:4, code:'Niski', desc:'Mniej istotne, możliwe do rozpatrzenia w normalnym trybie', class:'pri-4'},
-  {id:5, code:'Informacyjny', desc:'Informacja bez bezpośredniego wpływu', class:'pri-5'},
-  {id:6, code:'Nieokreślony', desc:'Wybierz jeśli nie wiesz — moderator oceni', class:'pri-5'}
+  {id:1, code:'Krytyczny', class:'pri-1'},
+  {id:2, code:'Wysoki', class:'pri-2'},
+  {id:3, code:'Średni', class:'pri-3'},
+  {id:4, code:'Niski', class:'pri-4'},
+  {id:5, code:'Informacyjny', class:'pri-5'},
+  {id:6, code:'Nieokreślony', class:'pri-5'}
 ];
 
 // --- DOM ---
@@ -223,13 +224,13 @@ let selectedFile = null;
 
 // wypełnij listy
 categories.forEach(c=>{ const opt = document.createElement('option'); opt.value=c; opt.textContent=c; categorySelect.appendChild(opt); });
-priorities.forEach(p=>{ const opt = document.createElement('option'); opt.value=p.id; opt.textContent = `${p.code} — ${p.desc}`; prioritySelect.appendChild(opt); });
+priorities.forEach(p=>{ const opt = document.createElement('option'); opt.value=p.id; opt.textContent = p.code; prioritySelect.appendChild(opt); });
 
 // ustawienia DOM
 anonim.addEventListener('change', ()=>{ userNameWrapper.style.display = anonim.value==='jawnie' ? 'block' : 'none'; updatePreview(); });
-prioritySelect.addEventListener('change', ()=>updatePriorityPreview());
+prioritySelect.addEventListener('change', ()=>updatePreview());
 categorySelect.addEventListener('change', ()=>updatePreview());
-categorySearch.addEventListener('input', ()=> {
+categorySearch.addEventListener('input', ()=>{
   const q = categorySearch.value.trim().toLowerCase();
   for(let i=0;i<categorySelect.options.length;i++){
     const o = categorySelect.options[i];
@@ -267,82 +268,85 @@ function handleFile(f){
 function escapeHtml(s){ return s.replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;" })[c]); }
 
 // preview
-function updatePriorityPreview(){ const p = priorities.find(x=>String(x.id)===prioritySelect.value) || {code:'Brak', class:'pri-5'}; priorityPreview.textContent = `Priorytet: ${p.code}`; priorityPreview.className = `priority-badge ${p.class}`; }
-function updatePreview(){ anonPreview.textContent = anonim.value==='anonim' ? 'Anonim' : (userName.value || 'Podane'); catPreview.textContent = categorySelect.value || '—'; contentPreview.textContent = reportContent.value.trim() || '(pusta)'; renderTags(); updatePriorityPreview(); }
+function updatePreview(){ anonPreview.textContent = anonim.value==='anonim' ? 'Anonim' : (userName.value || 'Podane'); catPreview.textContent = categorySelect.value || '—'; contentPreview.textContent = reportContent.value.trim() || '(pusta)'; renderTags(); priorityPreview.textContent = `Priorytet: ${(priorities.find(x=>String(x.id)===prioritySelect.value)||{code:'—'}).code}`; }
 
 reportContent.addEventListener('input', updatePreview);
 userName.addEventListener('input', updatePreview);
 
-const previewBtn = document.getElementById('previewBtn');
-previewBtn.addEventListener('click', ()=>{ updatePreview(); alert('Podgląd zaktualizowany po prawej'); });
-
-const copyBtn = document.getElementById('copyBtn');
-copyBtn.addEventListener('click', async ()=>{
-  const text = buildMessageText();
-  try{ await navigator.clipboard.writeText(text); alert('Treść skopiowana do schowka'); }catch(e){ alert('Nie udało się skopiować: '+e); }
+// copy / preview
+document.getElementById('previewBtn').addEventListener('click', ()=>{ updatePreview(); alert('Podgląd zaktualizowany'); });
+document.getElementById('copyBtn').addEventListener('click', async ()=>{ 
+  try{ await navigator.clipboard.writeText(buildMessageText()); alert('Skopiowano do schowka'); }catch(e){ alert('Nie udało się skopiować'); }
 });
-function buildMessageText(){ const isAnon = anonim.value==='anonim'; const name = isAnon? 'Anonim' : (userName.value || 'Podane'); const pri = (priorities.find(x=>String(x.id)===prioritySelect.value)||{code:'Brak'}).code; return `Nowe zgłoszenie\nAnonim: ${isAnon? 'Tak':'Nie'}\nImię: ${name}\nPriorytet: ${pri}\nKategoria: ${categorySelect.value}\nTagi: ${selectedTags.join(', ')}\n\nTreść:\n${reportContent.value.trim()}`; }
 
-// wysyłka do Discord z Embed
+function buildMessageText(){ 
+  return `Anonimowy: ${anonim.value==='anonim'?'Tak':'Nie'}\nImię: ${userName.value || '—'}\nPriorytet: ${(priorities.find(x=>String(x.id)===prioritySelect.value)||{code:'—'}).code}\nKategoria: ${categorySelect.value || '—'}\nTagi: ${selectedTags.join(', ') || '—'}\nTreść:\n${reportContent.value.trim() || '(pusta)'}`;
+}
+
+// wysyłka webhook Discord z embed
 const form = document.getElementById('reportForm');
 const submitBtn = document.getElementById('submitBtn');
-const webhookURL = 'https://discord.com/api/webhooks/1432415288359649280/vkv_KXleJL4PvO0zagVhy3QTn8nxhBHhFRhJ_i3FUjC-0fqEvNBSx-VYJ6wri5omi012'; // <-- Wstaw swój webhook
+const webhookURL = 'https://discord.com/api/webhooks/XXXXXXXX/YYYYYYYY'; // <-- Twój webhook
 
 form.addEventListener('submit', async (e)=>{
   e.preventDefault();
-  if(!reportContent.value.trim()){ alert('Musisz wpisać treść zgłoszenia.'); return; }
-  if(!categorySelect.value){ alert('Wybierz kategorię.'); return; }
-  if(!confirm('Czy na pewno chcesz wysłać zgłoszenie? Treść zostanie wysłana na ustawiony webhook.')) return;
+  if(!reportContent.value.trim()){ alert('Wpisz treść zgłoszenia'); return; }
+  if(!categorySelect.value){ alert('Wybierz kategorię'); return; }
+  if(!confirm('Na pewno wysłać zgłoszenie?')) return;
 
   loader.style.display='inline-block'; submitBtn.disabled=true;
 
-  const payloadEmbed = {
-    embeds: [
-      {
-        author: { name: "Konfidenci.pl" },
-        title: "**Wysłano Zgłoszenie**",
-        description: "> Przyjęto zgłoszenie z strony Konfidenci.pl",
-        fields: [
-          {
-            name: "**Informacje**:",
-            value: `>>> **Anonimowy**: ${anonim.value==='anonim' ? 'Tak':'Nie'}\n**Imię**: ${userName.value || '—'}\n**Nazwisko**: —\n**Priorytet**: ${(priorities.find(x=>String(x.id)===prioritySelect.value)||{code:'—'}).code}\n**Kategoria Zgłoszenia**: ${categorySelect.value || '—'}\n**Tagi**: ${selectedTags.join(', ') || '—'}`,
-            inline: false
-          },
-          {
-            name: "**Treść**:",
-            value: `>>> ${reportContent.value.trim() || '(pusta)'}`,
-            inline: false
-          }
-        ],
-        color: 0x000000,
-        footer: { text: "Konfidenci.pl" },
-        timestamp: new Date().toISOString()
-      }
-    ]
+  const embedPayload = {
+    embeds:[{
+      author:{name:"Konfidenci.pl"},
+      title:"**Wysłano Zgłoszenie**",
+      description:"> Przyjęto zgłoszenie z strony Konfidenci.pl",
+      fields:[
+        {
+          name:"**Informacje**:",
+          value:`>>> **Anonimowy**: ${anonim.value==='anonim'?'Tak':'Nie'}
+**Imię**: ${userName.value || '—'}
+**Nazwisko**: —
+**Priorytet**: ${(priorities.find(x=>String(x.id)===prioritySelect.value)||{code:'—'}).code}
+**Kategoria Zgłoszenia**: ${categorySelect.value || '—'}
+**Tagi**: ${selectedTags.join(', ') || '—'}`,
+          inline:false
+        },
+        {
+          name:"**Treść**:",
+          value:`>>> ${reportContent.value.trim() || '(pusta)'}`,
+          inline:false
+        }
+      ],
+      color:0x000000,
+      footer:{text:"Konfidenci.pl"},
+      timestamp:new Date().toISOString()
+    }]
   };
 
   try{
     if(selectedFile){
       const formData = new FormData();
-      formData.append('payload_json', JSON.stringify(payloadEmbed));
+      formData.append('payload_json', JSON.stringify(embedPayload));
       formData.append('file', selectedFile, selectedFile.name);
-      const res = await fetch(webhookURL, { method:'POST', body: formData });
-      if(!res.ok) throw new Error('Server odpowiedział: '+res.status);
+      const res = await fetch(webhookURL, {method:'POST', body: formData});
+      if(!res.ok) throw new Error('Błąd: '+res.status);
     } else {
-      const res = await fetch(webhookURL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payloadEmbed) });
-      if(!res.ok) throw new Error('Server odpowiedział: '+res.status);
+      const res = await fetch(webhookURL, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(embedPayload)});
+      if(!res.ok) throw new Error('Błąd: '+res.status);
     }
-    alert('Zgłoszenie wysłane poprawnie.');
+    alert('Zgłoszenie wysłane!');
     form.reset(); selectedTags=[]; selectedFile=null; filePreview.innerHTML=''; renderTags(); updatePreview();
   }catch(err){
     console.error(err);
-    alert('Wysłanie nie powiodło się: '+err.message+"\nJeśli błąd to prawdopodobnie CORS — użyj backendu lub skopiuj treść.");
-  } finally { loader.style.display='none'; submitBtn.disabled=false; }
+    alert('Nie udało się wysłać: '+err.message);
+  } finally{ loader.style.display='none'; submitBtn.disabled=false; }
 });
 
-// inicjalizacja
+// inicjalizacja podglądu
 updatePreview();
 </script>
+
 		<script>
 			particlesJS('particles-js',{
 				particles:{
