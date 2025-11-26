@@ -296,33 +296,34 @@ form.addEventListener('submit', async (e)=>{
 
   loader.style.display='inline-block'; submitBtn.disabled=true;
 
-  const embedPayload = {
-    embeds:[{
-      author:{name:"Konfidenci.pl"},
-      title:"**Wysłano Zgłoszenie**",
-      description:"> Przyjęto zgłoszenie z strony Konfidenci.pl",
-      fields:[
-        {
-          name:"**Informacje**:",
-          value:`>>> **Anonimowy**: ${anonim.value==='anonim'?'Tak':'Nie'}
+const embedPayload = {
+  embeds:[{
+    author:{name:"Konfidenci.pl"},
+    title:"Wysłano Zgłoszenie".slice(0, 256),
+    description:(reportContent.value.trim()?"> Przyjęto zgłoszenie z strony Konfidenci.pl":"> Brak treści").slice(0, 4096),
+    fields:[
+      {
+        name:"Informacje:",
+        value:`>>> **Anonimowy**: ${anonim.value==='anonim'?'Tak':'Nie'}
 **Imię**: ${userName.value || '—'}
 **Nazwisko**: —
 **Priorytet**: ${(priorities.find(x=>String(x.id)===prioritySelect.value)||{code:'—'}).code}
 **Kategoria Zgłoszenia**: ${categorySelect.value || '—'}
-**Tagi**: ${selectedTags.join(', ') || '—'}`,
-          inline:false
-        },
-        {
-          name:"**Treść**:",
-          value:`>>> ${reportContent.value.trim() || '(pusta)'}`,
-          inline:false
-        }
-      ],
-      color:0x000000,
-      footer:{text:"Konfidenci.pl"},
-      timestamp:new Date().toISOString()
-    }]
-  };
+**Tagi**: ${selectedTags.join(', ') || '—'}`.slice(0, 1024),
+        inline:false
+      },
+      {
+        name:"Treść:",
+        value:(reportContent.value.trim() || '(pusta)').slice(0, 1024),
+        inline:false
+      }
+    ],
+    color:0x000000,
+    footer:{text:"Konfidenci.pl"},
+    timestamp:new Date().toISOString()
+  }]
+};
+
 
   try{
     if(selectedFile){
